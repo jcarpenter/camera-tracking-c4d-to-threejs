@@ -1,0 +1,3 @@
+Threejs Camera Tracking Test
+
+Note: after-effects module has a broken dependency, is-explicity. An older version must be used. After `npm install`, go into node_modules > after-effects package.json and edit dependency `"is-explicit": "^1.0.1",` to `"is-explicit": "1.0.1",`, then run `npm install` again. After that, things should work. Run `node test2.js` and json data from an open After Effects project should write to an example.json file.
