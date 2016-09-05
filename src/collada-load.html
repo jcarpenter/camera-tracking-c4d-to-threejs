@@ -11,7 +11,7 @@
   </head>
   <body>
 
-    <video id="video" src="media/test-footage.webm" loop autoplay></video>
+    <video id="video" src="media/test-footage.webm" loop></video>
     <div id="container" ></div>
 
     <script src="js/three.min.js"></script>
@@ -24,7 +24,8 @@
 
 'use strict'
 
-document.getElementById( 'video' ).addEventListener( 'loadeddata', onWindowResize );
+var videoEl = document.getElementById( 'video' );
+videoEl.addEventListener( 'loadeddata', loadModel );
 
 var container;
 var scene, camera, renderer, controls;
@@ -41,30 +42,32 @@ var dolly;
 var loader = new THREE.ColladaLoader();
 loader.options.convertUpAxis = true;
 
-loader.load( './models/cam-track-test8.dae', function ( collada ) {
+function loadModel() {
 
-  dae = collada.scene;
-  animations = collada.animations;
-  kfAnimationsLength = animations.length;
-  dae.scale.x = dae.scale.y = dae.scale.z = 0.01;
+  loader.load( './models/cam-track-test10.dae', function ( collada ) {
 
-  dae.getObjectByName( 'solvedCam', true ).traverse(function(child) {
-    if (child instanceof THREE.PerspectiveCamera) {
-        camera = child;
-        camera.near = 1;
-        camera.fov = 37.4;
-        console.log(camera.position);
-    }
-  });
+    dae = collada.scene;
+    animations = collada.animations;
+    kfAnimationsLength = animations.length;
+    dae.scale.x = dae.scale.y = dae.scale.z = 0.01;
 
-  camera.updateProjectionMatrix();
-  camera.matrixNeedsUpdate = true;
-  dae.updateMatrix();
+    dae.getObjectByName( 'solvedCam', true ).traverse(function(child) {
+      if (child instanceof THREE.PerspectiveCamera) {
+          camera = child;
+          camera.near = 1;
+          camera.fov = 33.148;
+          console.log(camera.position);
+      }
+    });
 
-  init();
-  start();
+    camera.updateProjectionMatrix();
+    camera.matrixNeedsUpdate = true;
+    dae.updateMatrix();
 
-} );
+    init();
+
+  } );
+}
 
 
 function onWindowResize() {
@@ -98,7 +101,7 @@ function init() {
   
   box = new THREE.Mesh( new THREE.BoxGeometry( 0.4,.2,.4 ), new THREE.MeshNormalMaterial() );
   box.position.set(0,0.1,0);
-  scene.add(box);
+  // scene.add(box);
 
   scene.add( dae );
 
@@ -117,6 +120,8 @@ function init() {
   window.addEventListener( 'resize', onWindowResize, false );
 
   onWindowResize();
+  videoEl.play();
+  start();
   animate( lastTimestamp );
 
 }
@@ -165,6 +170,8 @@ function animate( timestamp ) {
 
   if ( progress >= 0 && progress < 198 ) {
 
+    console.log(frameTime);
+
     for ( var i = 0; i < kfAnimationsLength; ++i ) {
 
       kfAnimations[ i ].update( frameTime );
@@ -184,14 +191,10 @@ function animate( timestamp ) {
 
   }
 
-  // pointLight.position.copy( camera.position );
-
   progress += frameTime;
   lastTimestamp = timestamp;
   requestAnimationFrame( animate );
   renderer.render( scene, camera );
-
-  // console.log(dolly.position);
 
 }
 
@@ -206,7 +209,6 @@ function animate( timestamp ) {
 
 //   var t = video.currentTime * 100;
 //   renderer.render( scene, camera );
-
 // }
 
 </script>
