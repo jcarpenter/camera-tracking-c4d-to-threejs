@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<COLLADA xmlns="http://www.collada.org/2008/03/COLLADASchema" version="1.5.0">
+	<asset>
+		<contributor>
+			<authoring_tool>CINEMA4D 17.053 COLLADA Exporter</authoring_tool>
+		</contributor>
+		<created>2016-09-05T00:38:24Z</created>
+		<modified>2016-09-05T00:38:24Z</modified>
+		<unit meter="0.01" name="centimeter"/>
+		<up_axis>Y_UP</up_axis>
+	</asset>
+	<library_geometries>
+		<geometry id="ID3">
+			<mesh>
+				<source id="ID4">
+					<float_array id="ID5" count="12" digits="2490374">-45 45 -0 45 45 -0 -45 -45 -0 45 -45 -0</float_array>
+					<technique_common>
+						<accessor count="4" source="#ID5" stride="3">
+							<param name="X" type="float"/>
+							<param name="Y" type="float"/>
+							<param name="Z" type="float"/>
+						</accessor>
+					</technique_common>
+				</source>
+				<source id="ID6">
+					<float_array id="ID7" count="3" digits="2490374">0 0 -1</float_array>
+					<technique_common>
+						<accessor count="1" source="#ID7" stride="3">
+							<param name="X" type="float"/>
+							<param name="Y" type="float"/>
+							<param name="Z" type="float"/>
+						</accessor>
+					</technique_common>
+				</source>
+				<source id="ID8">
+					<float_array id="ID9" count="2" digits="2490374">0 1</float_array>
+					<technique_common>
+						<accessor count="1" source="#ID9" stride="2">
+							<param name="S" type="float"/>
+							<param name="T" type="float"/>
+						</accessor>
+					</technique_common>
+				</source>
+				<vertices id="ID10">
+					<input semantic="POSITION" source="#ID4"/>
+				</vertices>
+				<polylist count="1">
+					<input offset="0" semantic="VERTEX" source="#ID10" set="0"/>
+					<input offset="1" semantic="NORMAL" source="#ID6" set="0"/>
+					<input offset="2" semantic="TEXCOORD" source="#ID8" set="0"/>
+					<vcount>4</vcount>
+					<p>1 0 0 3 0 0 2 0 0 0 0 0</p>
+				</polylist>
+			</mesh>
+		</geometry>
+		<geometry id="ID12">
+			<mesh>
+				<source id="ID13">
+					<float_array id="ID14" count="24" digits="2490374">-5 -50 5 -5 50 5 5 -50 5 5 50 5 5 -50 -5 5 50 -5 -5 -50 -5 -5 50 -5</float_array>
+					<technique_common>
+						<accessor count="8" source="#ID14" stride="3">
+							<param name="X" type="float"/>
+							<param name="Y" type="float"/>
+							<param name="Z" type="float"/>
+						</accessor>
+					</technique_common>
+				</source>
+				<source id="ID15">
+					<float_array id="ID16" count="18" digits="2490374">0 0 1 1 0 -0 0 0 -1 -1 0 -0 0 1 -0 0 -1 -0</float_array>
+					<technique_common>
+						<accessor count="6" source="#ID16" stride="3">
+							<param name="X" type="float"/>
+							<param name="Y" type="float"/>
+							<param name="Z" type="float"/>
+						</accessor>
+					</technique_common>
+				</source>
+				<source id="ID17">
+					<float_array id="ID18" count="2" digits="2490374">0 1</float_array>
+					<technique_common>
+						<accessor count="1" source="#ID18" stride="2">
+							<param name="S" type="float"/>
+							<param name="T" type="float"/>
+						</accessor>
+					</technique_common>
+				</source>
+				<vertices id="ID19">
+					<input semantic="POSITION" source="#ID13"/>
+				</vertices>
+				<polylist count="6">
+					<input offset="0" semantic="VERTEX" source="#ID19" set="0"/>
+					<input offset="1" semantic="NORMAL" source="#ID15" set="0"/>
+					<input offset="2" semantic="TEXCOORD" source="#ID17" set="0"/>
+					<vcount>4 4 4 4 4 4</vcount>
+					<p>2 0 0 3 0 0 1 0 0 0 0 0 4 1 0 5 1 0 3 1 0 2 1 0 6 2 0 7 2 0 5 2 0 4 2 0 0 3 0 1 3 0 7 3 0 6 3 0 3 4 0 5 4 0 7 4 0 1 4 0 4 5 0 2 5 0 0 5 0 6 5 0</p>
+				</polylist>
+			</mesh>
+		</geometry>
+	</library_geometries>
+	<library_cameras>
+		<camera id="ID21" name="Solved_Camera">
+			<optics>
+				<technique_common>
+					<perspective>
+						<xfov>62.1134</xfov>
+						<aspect_ratio>0.75</aspect_ratio>
+						<znear>0.1</znear>
+						<zfar>4000</zfar>
+					</perspective>
+				</technique_common>
+			</optics>
+		</camera>
+	</library_cameras>
+	<library_visual_scenes>
+		<visual_scene id="ID1">
+			<node id="ID2" name="Plane">
+				<translate sid="translate">-256.807 136.763 -59.7535</translate>
+				<rotate sid="rotateY">0 1 0 344.876</rotate>
+				<rotate sid="rotateX">1 0 0 -15.9198</rotate>
+				<rotate sid="rotateZ">0 0 1 -354.38</rotate>
+				<scale sid="scale">1 1 1</scale>
+				<instance_geometry url="#ID3"/>
+			</node>
+			<node id="ID11" name="Cube">
+				<translate sid="translate">6.93889e-16 50 -1.77636e-15</translate>
+				<rotate sid="rotateY">0 1 0 344.876</rotate>
+				<rotate sid="rotateX">1 0 0 -15.9198</rotate>
+				<rotate sid="rotateZ">0 0 1 -354.38</rotate>
+				<scale sid="scale">1 1 1</scale>
+				<instance_geometry url="#ID12"/>
+			</node>
+			<node id="ID20" name="Solved_Camera">
+				<translate sid="translate">-22.504 68.2859 -219.723</translate>
+				<rotate sid="rotateY">0 1 0 182.99</rotate>
+				<rotate sid="rotateX">1 0 0 -0.188942</rotate>
+				<rotate sid="rotateZ">0 0 1 -0.740135</rotate>
+				<scale sid="scale">1 1 1</scale>
+				<instance_camera url="#ID21"/>
+			</node>
+		</visual_scene>
+	</library_visual_scenes>
+	<scene>
+		<instance_visual_scene url="#ID1"/>
+	</scene>
+</COLLADA>

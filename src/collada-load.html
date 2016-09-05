@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <style>
+      * { margin: 0; padding: 0;}
+      video{ position: absolute; left: 0;top: 0; width: 100%;  }
+      #container{ position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+
+    <video id="video" src="media/test-footage.webm" loop autoplay ></video>
+    <div id="container" ></div>
+    <script src="js/three.min.js"></script>
+    <script src="js/loaders/collada/Animation.js"></script>
+    <script src="js/loaders/collada/AnimationHandler.js"></script>
+    <script src="js/loaders/collada/KeyFrameAnimation.js"></script>
+    <script src="js/loaders/ColladaLoader.js"></script>
+
+<script>
+
+'use strict'
+
+document.getElementById( 'video' ).addEventListener( 'loadeddata', onWindowResize );
+
+var container;
+var scene, camera, renderer, controls;
+var box;
+
+var dae;
+
+var loader = new THREE.ColladaLoader();
+loader.options.convertUpAxis = true;
+loader.load( './models/cam-track-test3.dae', function ( collada ) {
+
+  dae = collada.scene;
+
+  // dae.traverse( function ( child ) {
+
+  //   if ( child instanceof THREE.SkinnedMesh ) {
+
+  //     var animation = new THREE.Animation( child, child.geometry.animation );
+  //     animation.play();
+
+  //   }
+
+  // } );
+
+  dae.scale.x = dae.scale.y = dae.scale.z = 0.01;
+  dae.updateMatrix();
+
+  // init();
+  // animate();
+
+} );
+
+
+function onWindowResize() {
+
+  var w = video.clientWidth
+  var h = video.clientHeight;
+
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+
+  renderer.setSize( w, h );
+
+}
+
+window.addEventListener( 'load', init, false );
+
+function init() {
+
+  container = document.getElementById( 'container' );
+  renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true });
+  renderer.setSize( window.innerWidth, window.innerHeight );
+  container.appendChild( renderer.domElement );
+  scene = new THREE.Scene();
+
+  camera = new THREE.PerspectiveCamera( 37.4, window.innerWidth / window.innerHeight, .000001, 1594 );
+  camera.position.set(-.0945, .5414, 2.219); // positive Y and positive Z (invert from AE);
+  // camera.rotation.set(-3.089,0.00329,0.0129);
+  camera.rotation.set(0,0.00329,0.0129);
+  scene.add( camera );
+  
+  box = new THREE.Mesh( new THREE.BoxGeometry( .1,1,.1 ), new THREE.MeshNormalMaterial() );
+  box.position.set(0,0.5,0);
+  scene.add(box);
+
+  // box = new THREE.Mesh(new THREE.BoxGeometry(1,1,1), new THREE.MeshNormalMaterial());
+  // box.position.set(0,0,-5);
+  // scene.add(box);
+
+  scene.add( dae );
+
+  window.addEventListener( 'resize', onWindowResize, false );
+
+  onWindowResize();
+  animate();
+
+}
+
+function animate() {
+
+  requestAnimationFrame( animate );
+  render();
+
+}
+
+function render() {
+
+  var t = video.currentTime * 100;
+  renderer.render( scene, camera );
+
+}
+
+</script>
+
+
+</body>
+</html>
