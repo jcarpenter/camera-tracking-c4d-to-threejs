@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <style>
+      * { margin: 0; padding: 0;}
+      video{ position: absolute; left: 0;top: 0; width: 100%;  }
+      #container{ position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+
+    <video id="video" src="media/test-footage.webm" loop></video>
+    <div id="container" ></div>
+
+    <script src="js/three.min.js"></script>
+    <script src="js/loaders/collada/Animation.js"></script>
+    <script src="js/loaders/collada/AnimationHandler.js"></script>
+    <script src="js/loaders/collada/KeyFrameAnimation.js"></script>
+    <script src="js/loaders/ColladaLoader.js"></script>
+
+<script>
+
+'use strict'
+
+var videoEl = document.getElementById( 'video' );
+videoEl.addEventListener( 'loadeddata', loadModel );
+
+var container;
+var scene, camera, renderer, controls;
+var box;
+
+var dae;
+var animations;
+var kfAnimations = [ ];
+var kfAnimationsLength = 0;
+var lastTimestamp = 0;
+var progress = 0;
+var dolly;
+
+var loader = new THREE.ColladaLoader();
+loader.options.convertUpAxis = true;
+
+function loadModel() {
+
+  loader.load( './models/cam-track-test10.dae', function ( collada ) {
+
+    dae = collada.scene;
+    animations = collada.animations;
+    kfAnimationsLength = animations.length;
+    dae.scale.x = dae.scale.y = dae.scale.z = 0.01;
+
+    dae.getObjectByName( 'solvedCam', true ).traverse(function(child) {
+      if (child instanceof THREE.PerspectiveCamera) {
+          camera = child;
+          camera.near = 1;
+          camera.fov = 33.148;
+          // console.log(camera.position);
+      }
+    });
+
+    camera.updateProjectionMatrix();
+    camera.matrixNeedsUpdate = true;
+    dae.updateMatrix();
+
+    init();
+
+  } );
+}
+
+
+function onWindowResize() {
+
+  var w = video.clientWidth
+  var h = video.clientHeight;
+
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+
+  renderer.setSize( w, h );
+
+}
+
+
+function init() {
+
+  container = document.getElementById( 'container' );
+  renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true });
+  renderer.setSize( window.innerWidth, window.innerHeight );
+  container.appendChild( renderer.domElement );
+  scene = new THREE.Scene();
+  
+  box = new THREE.Mesh( new THREE.BoxGeometry( 0.4,.2,.4 ), new THREE.MeshNormalMaterial() );
+  box.position.set(0,0.1,0);
+  scene.add(box);
+
+  scene.add( dae );
+
+  // KeyFrame Animations
+
+  for ( var i = 0; i < kfAnimationsLength; ++i ) {
+
+    var animation = animations[ i ];
+
+    var kfAnimation = new THREE.KeyFrameAnimation( animation );
+    kfAnimation.timeScale = 1;
+    kfAnimations.push( kfAnimation );
+
+  }
+
+  window.addEventListener( 'resize', onWindowResize, false );
+
+  onWindowResize();
+  videoEl.play();
+  start();
+  animate();
+
+}
+
+function start() {
+
+  for ( var i = 0; i < kfAnimationsLength; ++i ) {
+
+    var animation = kfAnimations[i];
+
+    for ( var h = 0, hl = animation.hierarchy.length; h < hl; h++ ) {
+
+      var keys = animation.data.hierarchy[ h ].keys;
+      var sids = animation.data.hierarchy[ h ].sids;
+      var obj = animation.hierarchy[ h ];
+
+      if ( keys.length && sids ) {
+
+        for ( var s = 0; s < sids.length; s++ ) {
+
+          var sid = sids[ s ];
+          var next = animation.getNextKeyWith( sid, h, 0 );
+
+          if ( next ) next.apply( sid );
+
+        }
+
+        obj.matrixAutoUpdate = false;
+        animation.data.hierarchy[ h ].node.updateMatrix();
+        obj.matrixWorldNeedsUpdate = true;
+
+      }
+
+    }
+
+    animation.play();
+
+  }
+
+  console.log(kfAnimations);
+
+}
+
+var oTime = 0;
+
+function animate( ) {
+
+  if (video.currentTime == 0) {
+
+    kfAnimations[ 0 ].stop();
+    kfAnimations[ 0 ].play();
+
+  } else {
+
+    var dif = video.currentTime - oTime;
+    if( dif < 0 ) dif = video.currentTime;
+    oTime = video.currentTime;
+    kfAnimations[ 0 ].update( dif );
+  }
+
+  requestAnimationFrame( animate );
+  renderer.render( scene, camera );
+
+}
+
+</script>
+
+
+</body>
+</html>
