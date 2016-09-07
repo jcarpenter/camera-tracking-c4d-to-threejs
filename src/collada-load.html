@@ -56,7 +56,7 @@ function loadModel() {
           camera = child;
           camera.near = 1;
           camera.fov = 33.148;
-          console.log(camera.position);
+          // console.log(camera.position);
       }
     });
 
@@ -82,7 +82,6 @@ function onWindowResize() {
 
 }
 
-// window.addEventListener( 'load', init, false );
 
 function init() {
 
@@ -91,17 +90,10 @@ function init() {
   renderer.setSize( window.innerWidth, window.innerHeight );
   container.appendChild( renderer.domElement );
   scene = new THREE.Scene();
-
-  // camera = new THREE.PerspectiveCamera( 37.4, window.innerWidth / window.innerHeight, .000001, 1594 );
-  // camera.position.set(-.0945, .5414, 2.219); // positive Y and positive Z (invert from AE);
-  // camera.rotation.set(-3.089,0.00329,0.0129);
-  // camera.rotation.set(0,0.00329,0.0129);
-  // camera.position.set(0,.5,10);
-  // scene.add( camera );
   
   box = new THREE.Mesh( new THREE.BoxGeometry( 0.4,.2,.4 ), new THREE.MeshNormalMaterial() );
   box.position.set(0,0.1,0);
-  // scene.add(box);
+  scene.add(box);
 
   scene.add( dae );
 
@@ -122,7 +114,7 @@ function init() {
   onWindowResize();
   videoEl.play();
   start();
-  animate( lastTimestamp );
+  animate();
 
 }
 
@@ -157,59 +149,35 @@ function start() {
 
     }
 
-    animation.loop = true;
     animation.play();
 
   }
 
+  console.log(kfAnimations);
+
 }
 
-function animate( timestamp ) {
+var oTime = 0;
 
-  var frameTime = ( timestamp - lastTimestamp ) * 0.001;
+function animate( ) {
 
-  if ( progress >= 0 && progress < 198 ) {
+  if (video.currentTime == 0) {
 
-    console.log(frameTime);
+    kfAnimations[ 0 ].stop();
+    kfAnimations[ 0 ].play();
 
-    for ( var i = 0; i < kfAnimationsLength; ++i ) {
+  } else {
 
-      kfAnimations[ i ].update( frameTime );
-
-    }
-
-  } else if ( progress >= 198 ) {
-
-    for ( var i = 0; i < kfAnimationsLength; ++i ) {
-
-      kfAnimations[ i ].stop();
-
-    }
-
-    progress = 0;
-    start();
-
+    var dif = video.currentTime - oTime;
+    if( dif < 0 ) dif = video.currentTime;
+    oTime = video.currentTime;
+    kfAnimations[ 0 ].update( dif );
   }
 
-  progress += frameTime;
-  lastTimestamp = timestamp;
   requestAnimationFrame( animate );
   renderer.render( scene, camera );
 
 }
-
-// function animate(timestamp) {
-
-//   requestAnimationFrame( animate );
-//   render();
-
-// }
-
-// function render() {
-
-//   var t = video.currentTime * 100;
-//   renderer.render( scene, camera );
-// }
 
 </script>
 
