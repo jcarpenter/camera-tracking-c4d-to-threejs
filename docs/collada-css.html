@@ -7,6 +7,18 @@
       * { margin: 0; padding: 0;}
       video{ position: absolute; left: 0;top: 0; width: 100%;  }
       #container{ position: absolute; left: 0; top: 0; }
+      #test {
+        background-color: rgba( 1, 168, 244, 0.8);
+        color: white;
+        font-size: 50px;
+        width: 300px;
+        height: 400px;
+      }
+
+      #veig {
+        width: 900px;
+        height: 506px;
+      }
     </style>
   </head>
   <body>
@@ -14,17 +26,23 @@
     <video id="video" src="media/test-footage.webm" loop></video>
     <div id="container" ></div>
 
+    <div id="test">Render</div>
+
+    <video id="veig" src="media/veig-idproject.mp4" autoplay controls loop></video> 
+
     <script src="js/three.min.js"></script>
     <script src="js/loaders/collada/Animation.js"></script>
     <script src="js/loaders/collada/AnimationHandler.js"></script>
     <script src="js/loaders/collada/KeyFrameAnimation.js"></script>
     <script src="js/loaders/ColladaLoader.js"></script>
 
+    <script src="js/renderers/CSS3DRenderer.js"></script>
+
 <script>
 
 'use strict'
 
-var videoEl = document.getElementById( 'video' );
+var videoEl = document.querySelector('#video');
 videoEl.addEventListener( 'loadeddata', loadModel );
 
 var container;
@@ -41,6 +59,8 @@ var dolly;
 
 var loader = new THREE.ColladaLoader();
 loader.options.convertUpAxis = true;
+
+var sceneCSS, rendererCSS;
 
 function loadModel() {
 
@@ -79,6 +99,7 @@ function onWindowResize() {
   camera.updateProjectionMatrix();
 
   renderer.setSize( w, h );
+  rendererCSS.setSize( w, h );
 
 }
 
@@ -88,12 +109,14 @@ function init() {
   container = document.getElementById( 'container' );
   renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true });
   renderer.setSize( window.innerWidth, window.innerHeight );
+  renderer.domElement.style.position = 'absolute';
+  renderer.domElement.style.top = 0;
   container.appendChild( renderer.domElement );
   scene = new THREE.Scene();
   
   box = new THREE.Mesh( new THREE.BoxGeometry( 0.4,.2,.4 ), new THREE.MeshNormalMaterial() );
   box.position.set(0,0.1,0);
-  scene.add(box);
+  // scene.add(box);
 
   scene.add( dae );
 
@@ -108,6 +131,30 @@ function init() {
     kfAnimations.push( kfAnimation );
 
   }
+
+  // CSS content setup
+
+  sceneCSS = new THREE.Scene();
+
+  var div = new THREE.CSS3DObject(document.querySelector('#test'));
+  div.scale.set(.001, .001, .001);
+  div.position.x = 0;
+  div.position.y = .5;
+  div.position.z = 0;
+  sceneCSS.add(div);
+
+  var veig = new THREE.CSS3DObject(document.querySelector('#veig'));
+  veig.scale.set(.001, .001, .001);
+  veig.position.x = .6;
+  veig.position.y = 1.2;
+  veig.position.z = -.47;
+  sceneCSS.add(veig);
+
+  rendererCSS = new THREE.CSS3DRenderer();
+  rendererCSS.setSize(window.innerWidth, window.innerHeight);
+  rendererCSS.domElement.style.position = 'absolute';
+  rendererCSS.domElement.style.top = 0;
+  container.appendChild( rendererCSS.domElement );
 
   window.addEventListener( 'resize', onWindowResize, false );
 
@@ -176,6 +223,7 @@ function animate( ) {
 
   requestAnimationFrame( animate );
   renderer.render( scene, camera );
+  rendererCSS.render( sceneCSS, camera );
 
 }
 

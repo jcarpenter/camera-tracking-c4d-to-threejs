@@ -7,12 +7,19 @@
       * { margin: 0; padding: 0;}
       video{ position: absolute; left: 0;top: 0; width: 100%;  }
       #container{ position: absolute; left: 0; top: 0; }
+      #test {
+        background: pink;
+        color: white;
+        font-size: 5em;
+      }
     </style>
   </head>
   <body>
 
     <video id="video" src="media/test-footage.webm" loop></video>
     <div id="container" ></div>
+
+    <div id="test">Render</div>
 
     <script src="js/three.min.js"></script>
     <script src="js/loaders/collada/Animation.js"></script>
