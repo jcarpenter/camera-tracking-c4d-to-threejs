@@ -19,6 +19,11 @@
         width: 900px;
         height: 506px;
       }
+
+      iframe {
+        border: none;
+      }
+
     </style>
   </head>
   <body>
@@ -28,7 +33,8 @@
 
     <div id="test">Render</div>
 
-    <video id="veig" src="media/veig-idproject.mp4" autoplay controls loop></video> 
+    <!-- <video id="veig" src="media/veig-idproject.mp4" autoplay controls loop></video>  -->
+    <iframe id="veig" src="iframe-test-1.html"></iframe> 
 
     <script src="js/three.min.js"></script>
     <script src="js/loaders/collada/Animation.js"></script>
@@ -226,6 +232,30 @@ function animate( ) {
   rendererCSS.render( sceneCSS, camera );
 
 }
+
+var iframeWin = document.querySelector("#veig").contentWindow;
+
+function receiveMessage (evt) {
+  if (evt.origin !== "http://localhost:8080") {
+    console.log("You are not worthy");
+    console.log(evt.origin);
+  } else {
+    console.log("You --are-- worthy!");
+    console.log(evt.origin);
+  } 
+}
+
+
+function sendMessage() {
+  iframeWin.postMessage("TESTING", "http://localhost:8080");
+  console.log("WINDOW LOADED");
+}
+
+window.addEventListener("message", receiveMessage, false);
+
+window.onload = function () {
+  // sendMessage();
+};
 
 </script>
 
