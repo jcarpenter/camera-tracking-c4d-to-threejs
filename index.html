@@ -4,15 +4,25 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <style>
+      body {
+        font-family: sans-serif;
+      }
+      
       * { margin: 0; padding: 0;}
+      
       video{ position: absolute; left: 0;top: 0; width: 100%;  }
+      
       #container{ position: absolute; left: 0; top: 0; }
+      
       #test {
         background-color: rgba( 1, 168, 244, 0.8);
         color: white;
         font-size: 50px;
         width: 300px;
         height: 400px;
+        padding: 30px;
+        border-radius: 20px;
+
       }
 
       #veig {
@@ -31,7 +41,7 @@
     <video id="video" src="media/test-footage.webm" loop></video>
     <div id="container" ></div>
 
-    <div id="test">Render</div>
+    <div id="test">DOM Element</div>
 
     <!-- <video id="veig" src="media/veig-idproject.mp4" autoplay controls loop></video>  -->
     <iframe id="veig" src="iframe-test-1.html"></iframe> 
@@ -126,6 +136,12 @@ function init() {
 
   scene.add( dae );
 
+  const skyColor = 0xB1E1FF;  // light blue
+  const groundColor = 0x23F0C7;  // brownish orange
+  const intensity = 1.5;
+  const light = new THREE.HemisphereLight(skyColor, groundColor, intensity);
+  scene.add(light);
+
   // KeyFrame Animations
 
   for ( var i = 0; i < kfAnimationsLength; ++i ) {
@@ -164,11 +180,12 @@ function init() {
 
   window.addEventListener( 'resize', onWindowResize, false );
 
-  onWindowResize();
-  videoEl.play();
-  start();
-  animate();
-
+  window.addEventListener('mousedown', (e) => {
+    onWindowResize();
+    videoEl.play();
+    start();
+    animate();
+  })
 }
 
 function start() {
