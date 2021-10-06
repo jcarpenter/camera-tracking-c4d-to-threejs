@@ -1,6 +1,10 @@
 # Camera Tracking from Cinema4D to Three.js
 
-This was an experiment to figure out a camera tracking workflow between Cinema 4D and Three.js, for the purpose of creating quasi-augmented reality Three.js experiments. The test scene demonstrates WebGL and HTML elements matched to an underlying footage plate. The process was:
+https://user-images.githubusercontent.com/1425497/136127412-7d72c42a-54ac-471f-8b4f-9e2d4f2bdbd7.mp4
+
+This was an experiment to figure out a camera tracking workflow between Cinema 4D and Three.js, for the purpose of creating quasi-augmented reality Three.js experiments. The results aren't perfect, but the test demonstrates WebGL and HTML elements matched to an underlying footage plate. 
+
+The process was:
 
 * Shoot live footage
 * Import into Cinema4D, generate camera track, and create a few test objects.
